@@ -15,6 +15,7 @@ class TiendaController extends Controller
     public function index()
     {
         //
+        return view('tienda');
     }
 
     /**
@@ -25,6 +26,9 @@ class TiendaController extends Controller
     public function create()
     {
         //
+        return Tienda::all();
+
+
     }
 
     /**
@@ -36,6 +40,13 @@ class TiendaController extends Controller
     public function store(Request $request)
     {
         //
+        Tienda::insert([
+            'nombre' => $request->input('nombre'),
+            'camaracomercio' => $request->input('camaracomercio'),
+            'fechaapertura' => $request->input('fechaapertura')
+          ]);
+          $response['message'] = "Guardo exitosamente";
+          $response['success'] = true;
     }
 
     /**
