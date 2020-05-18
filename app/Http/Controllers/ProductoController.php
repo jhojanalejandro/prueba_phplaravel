@@ -36,6 +36,22 @@ class ProductoController extends Controller
     public function store(Request $request)
     {
         //
+        $datosprod = request()->except('_token');
+        if($request->hasFile('imagen')){
+            $datosprod['imagen']= $request->hasFile('imagen')->store('uploads','public');
+        }
+        Producto::insert([
+            'nombre' => $request->input('nombre'),
+            'descripcion' => $request->input('descripcion'),
+            'valor' => $request->input('valor'),
+            'imagen' => $request->$datosprod,
+            'tienda' => $request->input('tienda'),
+            ]);
+            $response['message'] = "Guardo exitosamente";
+            $response['success'] = true;
+
+
+            return $response;
     }
 
     /**
@@ -67,19 +83,38 @@ class ProductoController extends Controller
      * @param  \App\producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, producto $producto)
+    public function update(Request $request)
     {
         //
-    }
+              // inserta los datos
+      Producto::where('SKU',$request->input('id'))->
+      update([
+        'nombre' => $request->input('nombre'),
+        'descripcion' => $request->input('descripcion'),
+        'valor' => $request->input('precio'),
+        'imagen' => $request->input('imagen')
+      ]);
 
+      // respesta de JSON
+      $response['message'] = "Actualizo exitosamente";
+      $response['success'] = true;
+
+      return $response;
+    }
     /**
      * Remove the specified resource from storage.
      *
      * @param  \App\producto  $producto
      * @return \Illuminate\Http\Response
      */
-    public function destroy(producto $producto)
+    public function destroy(Request $request)
     {
         //
+        Producto::where('SKU',$request->input('id'))->delete();
+        // respesta de JSON
+        $response['message'] = "Elimino exitosamente";
+        $response['success'] = true;
+
+        return $response;
     }
 }

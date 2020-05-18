@@ -78,9 +78,21 @@ class TiendaController extends Controller
      * @param  \App\Tienda  $tienda
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tienda $tienda)
+    public function update(Request $request)
     {
         //
+        Tienda::where('SKU',$request->input('id'))->
+        update([
+            'nombre' => $request->input('nombre'),
+            'camaracomercio' => $request->input('camaracomercio'),
+            'fechaapertura' => $request->input('fechaapertura')
+        ]);
+
+        // respesta de JSON
+        $response['message'] = "Actualizo exitosamente";
+        $response['success'] = true;
+
+        return $response;
     }
 
     /**
@@ -89,8 +101,14 @@ class TiendaController extends Controller
      * @param  \App\Tienda  $tienda
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tienda $tienda)
+    public function destroy(Request $request)
     {
         //
+        Tienda::where('camaracomercio',$request->input('id'))->delete();
+        // respesta de JSON
+        $response['message'] = "Elimino exitosamente";
+        $response['success'] = true;
+
+        return $response;
     }
 }

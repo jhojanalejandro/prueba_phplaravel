@@ -88,7 +88,6 @@ export default class Tienda extends Component {
             <button type="button" class="btn btn-danger" onClick={()=>this.showModalregistrar(data)}>
                 Registrar producto
               </button>
-            <button type="button" class="btn btn-primary col-md-3" data-toggle="modal" data-target="#productoModal"> Registrar producto</button>
                 <button class="btn btn-info" onClick={()=>this.showModalEdit(data)}>Editar</button>
                 <br/>
                 <button class="btn btn-danger" onClick={()=>this.showModalDelete(data)}>Eliminar</button>
@@ -142,8 +141,13 @@ export default class Tienda extends Component {
                     </div>
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                  {
+                    this.state.edit?
+                    <button type="button" class="btn btn-primary" onClick={()=>this.sendNetworkUpdate()}>Actualizar</button>
+                    :
                     <button type="button" class="btn btn-primary"  onClick={()=>this.sendtienda()}>Guardar</button>
+                    }
                   </div>
                 </div>
               </div>
@@ -181,13 +185,8 @@ export default class Tienda extends Component {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-
-                    {
-                    this.state.edit?
-                    <button type="button" class="btn btn-primary" onClick={()=>this.sendNetworkUpdate()}>Actualizar</button>
-                    :
                     <button type="button" class="btn btn-primary" onClick={()=>this.sendProduct()}>Guardar</button>
-                    }
+
                 </div>
                 </div>
             </div>
@@ -202,11 +201,11 @@ export default class Tienda extends Component {
       showModalregistrar(data){
         //alert("mostrar modal "+JSON.stringify(data))
         this.setState({
-          formtienda:data.camaracomercio,
-          edit:true
+          formtienda:data.camaracomercio
         })
         $("#productoModal").modal("show");
       }
+
 
 
   showModalEdit(data){
@@ -263,6 +262,17 @@ export default class Tienda extends Component {
 
   }
 
+  showModalcreate(data){
+    //alert("mostrar modal "+JSON.stringify(data))
+    this.setState({
+        formNombre_pro: "",
+        formdescripcion:"",
+        formvalor:"",
+        formimagen:"",
+        edit:true
+      })
+    $("#productoModal").modal("show");
+  }
   sendNetworkUpdate(){
 
     const formData = new FormData()
@@ -289,8 +299,34 @@ export default class Tienda extends Component {
 }
 
 
+enviardelete(){
+
+    const formData = new FormData()
+    formData.append('id',this.state.camaracomercio)
+
+    axios.post(baseUrl+'/producto/delete',formData).then(response=>{
+
+         if (response.data.success==true) {
+           alert(response.data.message)
+
+           $("#tiendaModalDelete").modal("hide");
+         }
+
+     }).catch(error=>{
+       alert("Error "+error)
+     })
 
   }
+   showModalDeletetienda(data){
+    // id seleccionado para eliminar
+    this.setState({
+        camaracomercio:data.camaracomercio })
+    $("#tiendaModalDelete").modal("show");
+  }
+
+
+}
+
 
 if (document.getElementById('tienda')) {
     ReactDOM.render(<Tienda />, document.getElementById('tienda'));
