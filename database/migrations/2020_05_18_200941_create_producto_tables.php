@@ -14,8 +14,9 @@ class CreateProductoTables extends Migration
     public function up()
     {
         Schema::create('producto_tables', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->integer('camaracomercio')->primary();
+            $table->string('nombre');
+            $table->date('fechaapertura');
         });
     }
 

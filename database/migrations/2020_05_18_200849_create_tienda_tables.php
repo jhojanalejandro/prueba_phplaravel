@@ -14,8 +14,13 @@ class CreateTiendaTables extends Migration
     public function up()
     {
         Schema::create('tienda_tables', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->id('SKU');
+            $table->string('nombre');
+            $table->string('descripcion');
+            $table->decimal('valor');
+            $table->integer('tienda');
+            $table->foreign('tienda')->references('camaracomercio')->on('tienda');
+            $table->string('imagen');
         });
     }
 
